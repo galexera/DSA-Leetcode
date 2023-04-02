@@ -1,0 +1,71 @@
+https://leetcode.com/problems/successful-pairs-of-spells-and-potions/
+
+Bruteforce : 
+O(n * m) 
+
+
+class Solution {
+    public int[] successfulPairs(int[] spells, int[] potions, long success) {
+        int[] ans = new int[spells.length];
+        Arrays.sort(potions);
+        for(int i=0;i<spells.length;i++)
+        {
+            int count  = 0;
+            
+            for(int j=0;j<potions.length;j++)
+            {
+                long mul = (long) spells[i]*potions[j];
+                if(mul>=success)
+                {
+                    count  = count  + ( potions.length-j);
+                    break;
+                }
+            }
+            ans[i] = count;
+        }
+        return ans;
+    }
+}
+
+The time complexity of the provided Java code is O(n * log m + m * log m), where n is the length of the spells array, and m is the length of the potions array.
+
+
+The Arrays.sort(potions) statement sorts the potions array in O(m * log m) time, where m is the length of the potions array. This is because the sorting algorithm used by Java's Arrays.sort() method is typically based on a variation of the quicksort algorithm, which has an average time complexity of O(n * log n) and a worst-case time complexity of O(n^2), where n is the length of the array.
+
+Optimised Soln
+
+class Solution {
+   public int[] successfulPairs(int[] spells, int[] potions, long success) {
+    int n = spells.length;
+    int m = potions.length;
+    int[] ans = new int[n];
+    Arrays.sort(potions);
+
+    for (int i = 0; i < n; i++) {
+        int count = 0;
+        int lo = 0, hi = m - 1;
+
+        while (lo <= hi) {
+            int mid = (lo + hi) / 2;
+
+            if ((long) spells[i] * potions[mid] >= success) {
+                hi = mid -1;
+            } else {
+                lo = mid + 1;
+            }
+        }
+
+        ans[i] = m - lo ;
+    }
+
+    return ans;
+}
+
+}
+
+Using Binary Search  : - 
+The time complexity of the given solution is O(nlogn + mlogm + nlogm), where n and m are the lengths of the arrays spells and potions, respectively.
+
+The first step of the solution involves sorting the arrays spells and potions, which takes O(nlogn + mlogm) time. Then, for each element in the spells array, we use binary search to find the number of potions that can form a successful pair with the given spell, which takes O(logm) time. Since we do this for each element in the spells array, the total time taken is O(nlogm).
+
+Therefore, the overall time complexity of the solution is O(nlogn + mlogm + nlogm).
